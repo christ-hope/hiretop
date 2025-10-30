@@ -31,6 +31,20 @@ export async function assignPermission(user: User, permissionName: string): Prom
   await user.related('permissions').attach([permission.id]);
 }
 
+// Methode pour retirer un role d'un utilisateur
+export async function removeRole(user: User, roleName: string): Promise<void> {
+  const role = await Role.query().where('name', roleName).firstOrFail();
+
+  await user.related('roles').detach([role.id]);
+}
+
+// Methode pour retirer une permission d'un utilisateur
+export async function removePermission(user: User, permissionName: string): Promise<void> {
+  const permission = await Permission.query().where('name', permissionName).firstOrFail();
+
+  await user.related('permissions').detach([permission.id]);
+}
+
 /**
  * Veifier une permission pour un utilisateur
  * ---------------------------------------------------------------------

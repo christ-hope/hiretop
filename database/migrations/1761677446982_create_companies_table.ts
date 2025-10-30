@@ -25,8 +25,8 @@ export default class extends BaseSchema {
         table.text('description').nullable()
         table.string('logo_url').nullable()
 
-        table.timestamp('created_at')
-        table.timestamp('updated_at')
+        table.timestamp('created_at').defaultTo(this.now())
+        table.timestamp('updated_at').defaultTo(this.now())
         table.timestamp('deleted_at').nullable()
       })
     }

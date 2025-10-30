@@ -6,8 +6,11 @@ export default class SkillSeeder extends BaseSeeder {
   async run() {
     const skills = data.skills
 
-    await Skill.truncate()
-
-    await Skill.createMany(skills)
+    skills.map(async (sk) => {
+      await Skill.firstOrCreate({
+        name: sk.name,
+        category: sk.category,
+      })
+    })
   }
 }

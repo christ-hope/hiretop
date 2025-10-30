@@ -12,9 +12,9 @@ export default class extends BaseSchema {
       table.enum('type', ['INFO', 'SUCCESS', 'WARNING', 'INVITATION'])
       table.boolean('isRead').defaultTo(false)
 
-      table.timestamp('created_at')
-      table.timestamp('updated_at')
-      table.timestamp('deleted_at')
+      table.datetime('created_at').notNullable().defaultTo(this.now())
+      table.datetime('updated_at').notNullable().defaultTo(this.now())
+      table.timestamp('deleted_at').nullable()
     })
   }
 

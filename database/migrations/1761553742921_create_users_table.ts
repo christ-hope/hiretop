@@ -18,8 +18,8 @@ export default class extends BaseSchema {
       table.string('profile').nullable()
       table.string('password').notNullable()
 
-      table.timestamp('created_at').notNullable()
-      table.timestamp('updated_at').nullable()
+      table.timestamp('created_at').defaultTo(this.now())
+      table.timestamp('updated_at').defaultTo(this.now())
       table.timestamp('deleted_at').nullable()
     })
   }

@@ -2,9 +2,9 @@ import { BaseSchema } from '@adonisjs/lucid/schema'
 
 export default class extends BaseSchema {
   protected tableName = 'talent_profiles'
-  protected userEducationsTable = 'user_educations'
-  protected userExperiencesTable = 'user_experiences'
-  protected userSkillsTable = 'user_skills'
+  protected userEducationsTable = 'talent_educations'
+  protected userExperiencesTable = 'talent_experiences'
+  protected userSkillsTable = 'talent_skills'
 
   /**
    * Table talent_profiles
@@ -28,7 +28,7 @@ export default class extends BaseSchema {
       table.string('github_url').nullable()
 
       table.timestamp('created_at').defaultTo(this.now())
-      table.timestamp('updated_at').nullable()
+      table.timestamp('updated_at').defaultTo(this.now())
       table.timestamp('deleted_at').nullable()
     })
 
@@ -44,7 +44,7 @@ export default class extends BaseSchema {
       table.text('description').nullable()
 
       table.timestamp('created_at').defaultTo(this.now())
-      table.timestamp('updated_at').nullable()
+      table.timestamp('updated_at').defaultTo(this.now())
       table.timestamp('deleted_at').nullable()
 
       table.index('talent_id')
@@ -63,7 +63,7 @@ export default class extends BaseSchema {
       table.text('description').nullable()
 
       table.timestamp('created_at').defaultTo(this.now())
-      table.timestamp('updated_at').nullable()
+      table.timestamp('updated_at').defaultTo(this.now())
       table.timestamp('deleted_at').nullable()
 
       table.index('talent_id')

@@ -20,9 +20,9 @@ export default class extends BaseSchema {
       table.integer('user_id').unsigned().references('users.id').onDelete('CASCADE')
 
       table.unique(['company_id', 'user_id'])
-      table.timestamp('created_at')
-      table.timestamp('updated_at')
-      table.timestamp('deleted_at')
+      table.timestamp('created_at').defaultTo(this.now())
+      table.timestamp('updated_at').defaultTo(this.now())
+      table.timestamp('deleted_at').nullable()
     })
   }
 

@@ -6,10 +6,8 @@ export default class extends BaseSeeder {
   async run() {
     const permissionsData = data.permissions
 
-    await Permission.truncate()
-
     permissionsData.map(async (permission) => {
-      await Permission.create({
+      await Permission.firstOrCreate({
         name: permission.name,
         description: permission.description,
       })

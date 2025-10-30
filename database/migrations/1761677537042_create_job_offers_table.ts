@@ -23,8 +23,8 @@ export default class extends BaseSchema {
       table.boolean('is_active').defaultTo(true)
       table.dateTime('expire_at').nullable()
       table.timestamp('created_at').defaultTo(this.now())
-      table.timestamp('updated_at')
-      table.timestamp('deleted_at')
+      table.timestamp('updated_at').defaultTo(this.now())
+      table.timestamp('deleted_at').nullable()
     })
   }
 

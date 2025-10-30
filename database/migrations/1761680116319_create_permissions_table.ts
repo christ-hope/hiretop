@@ -16,7 +16,7 @@ export default class extends BaseSchema {
       table.string('name', 100).unique().notNullable()
       table.text('description').nullable()
       table.timestamp('created_at').defaultTo(this.now())
-      table.timestamp('updated_at')
+      table.timestamp('updated_at').defaultTo(this.now())
     })
   }
 

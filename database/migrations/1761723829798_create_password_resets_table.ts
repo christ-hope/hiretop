@@ -18,7 +18,7 @@ export default class extends BaseSchema {
       table.string('email').primary()
       table.string('token').notNullable()
       table.timestamp('created_at').defaultTo(this.now())
-      table.timestamp('updated_at')
+      table.timestamp('updated_at').defaultTo(this.now())
     })
   }
 
