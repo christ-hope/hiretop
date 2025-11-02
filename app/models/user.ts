@@ -26,6 +26,10 @@ export default class User extends compose(BaseModel, AuthFinder) {
   @column() declare profile: string
   @column({ serializeAs: null }) declare password: string
 
+  @column()
+  public rememberMeToken?: string;
+  @column.dateTime() declare emailVerifiedAt: DateTime | null
+
   @column.dateTime({ autoCreate: true }) declare createdAt: DateTime
   @column.dateTime({ autoCreate: true, autoUpdate: true }) declare updatedAt: DateTime | null
   @column.dateTime() declare deleletedAt: DateTime | null
@@ -38,5 +42,10 @@ export default class User extends compose(BaseModel, AuthFinder) {
   @manyToMany(() => Role, { pivotTable: 'user_has_roles' }) declare roles: relations.ManyToMany<typeof Role>
   @manyToMany(() => Permission, { pivotTable: 'user_has_permissions' }) declare permissions: relations.ManyToMany<typeof Permission>
 
-  static accessTokens = DbAccessTokensProvider.forModel(User)
+  static accessTokens = DbAccessTokensProvider.forModel(User, {
+    expiresIn: '30 days',
+    table: 'auth_access_tokens',
+    type: 'auth_token',
+    tokenSecretLength: 40,
+  })
 }

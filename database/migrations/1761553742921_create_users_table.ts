@@ -15,8 +15,11 @@ export default class extends BaseSchema {
       table.string('firstname').notNullable()
       table.string('lastname').notNullable()
       table.string('email', 254).notNullable().unique()
-      table.string('profile').nullable()
       table.string('password').notNullable()
+      table.string('profile').nullable()
+      table.timestamp('email_verified_at').nullable()
+      table.string('remember_me_token').nullable()
+
 
       table.timestamp('created_at').defaultTo(this.now())
       table.timestamp('updated_at').defaultTo(this.now())
