@@ -8,7 +8,8 @@ import {
   assignPermission,
   can,
   removeRole,
-  removePermission } from '../helpers/rbac.js'
+  removePermission,
+} from '../helpers/rbac.js'
 
 export default class RbacMiddleware {
   async handle(ctx: HttpContext, next: NextFn) {
@@ -27,7 +28,7 @@ export default class RbacMiddleware {
     /**
      * Call next method in the pipeline and return its output
      */
-    const output = await next()
-    return output
+
+    return await next()
   }
 }

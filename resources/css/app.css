@@ -1,0 +1,13 @@
+@tailwind utilities;
+
+* {
+  font-family: 'Poppins', 'calibri', sans-serif, display;
+}
+
+.card {
+  height: 720px;
+  width: 100%;
+  clip-path: path(
+    'M 0, 60 L 86, 6 A 6, 6, 0 0 0 92, 3 A 6, 6, 0, 0, 0, 100, 9 L 100, 94 A 6, 6, 0, 0, 1 92, 97 L 8, 97 A 6, 6, 0, 0, 1, 0, 91 L 0, 12 A 6, 6% 0 0 1 8% 9% Z'
+  );
+}

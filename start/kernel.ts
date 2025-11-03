@@ -28,7 +28,7 @@ server.use([
   () => import('@adonisjs/cors/cors_middleware'),
   () => import('@adonisjs/vite/vite_middleware'),
   () => import('@adonisjs/inertia/inertia_middleware'),
-  () => import('#middleware/rbac_middleware')
+  // () => import('#middleware/rbac_middleware')
 ])
 
 /**
@@ -47,5 +47,6 @@ router.use([
  * the routes or the routes group.
  */
 export const middleware = router.named({
+  guest: () => import('#middleware/guest_middleware'),
   auth: () => import('#middleware/auth_middleware')
 })

@@ -5,11 +5,19 @@ import { AuthService } from '#services/Auth/auth_service'
 import { loginValidator, registerUserValidation } from '#validators/auth_request'
 import { DateTime } from 'luxon'
 import User from '#models/user'
+import env from '#start/env'
+import { inject } from '@adonisjs/core'
 
+@inject()
 export default class AuthController {
   constructor(protected authService: AuthService) {}
 
-  async registerTalent({ assignRole, request, response }: HttpContext) {
+  // vue pour inscription Talent
+  async registerTalentScreen({ request, inertia }: HttpContext) {
+    return inertia.render('auth/talent/register')
+  }
+
+  async storeTalent({ assignRole, request, response }: HttpContext) {
     const data = await request.validateUsing(registerUserValidation)
     const user = await this.authService.registerUser(data)
 
@@ -29,8 +37,12 @@ export default class AuthController {
     return response.created({ message: 'Inscription réussie. Vérifiez votre email.' })
   }
 
-  async registerCompanyAdmin({ assignRole, request, response }: HttpContext) {
-    const data = await registerUserValidation.validate(request.all())
+  // vue inscription pour compte recruiter
+  async registerCompanyScreen({ inertia }: HttpContext) {
+    return inertia.render('auth/talent/register')
+  }
+  async storeCompanyAdmin({ assignRole, request, response, session }: HttpContext) {
+    const data = await request.validateUsing(registerUserValidation)
     const user = await this.authService.registerUser(data)
 
     assignRole(user, 'COMPANY_ADMIN')
@@ -41,40 +53,54 @@ export default class AuthController {
     await Mail.send((message) => {
       message
         .to(user.email)
-        .from('info@hiretop.com', 'HireTop')
-        .subject('Vérifiez votre compte HireTop')
+        .from('info@hiretop.com', env.get('APP_NAME'))
+        .subject('Vérifiez votre compte' + env.get('APP_NAME'))
         .htmlView('emails/verify_email', { user, verificationUrl })
     })
 
-    return response.created({ user, message: 'utilisateur créé avec succès' })
+    session.flash('success', 'Compte entreprise créé. Vérifiez votre email.')
+    return response.redirect().toPath('/login')
   }
 
   /**
-   * Mise en plqce de la Connexion
+   * vue pour la connexion
    */
-  async login({ request, response }: HttpContext) {
+
+  async loginScreen({ request, inertia }: HttpContext) {
+    return inertia.render('auth/login')
+  }
+
+  /**
+   * handler connexion
+   */
+  async login({ auth, request, response, session }: HttpContext) {
     const { email, password } = await request.validateUsing(loginValidator)
 
     const user = await User.verifyCredentials(email, password)
 
     // Vérifier que l'email est confirmé
     if (!user.emailVerifiedAt) {
-      return response.unprocessableEntity({
-        message: 'Veuillez vérifier votre email avant de vous connecter.',
-      })
+      session.flash('error', 'Veuillez vérifier votre email avant de vous connecter.')
+      return response.redirect().back()
     }
-    User.accessTokens.create(user)
+
+    // Ici utiisation de session
+    await auth.use('web').login(user)
+
+    // ici utilisation token
+    // User.accessTokens.create(user)
   }
 
   /**
    * Methode de deconnexion
    */
-  async logout({ auth }: HttpContext) {
+  async logout({ auth, response, session }: HttpContext) {
     const user = await auth.user!
 
-    User.accessTokens.delete(user, user.currentAccessToken.identifier)
-
-    return { message: 'Déconnexion effectuée avec succès' }
+    if (!user) return null
+    await auth.use('web').logout()
+    session.flash('success', 'Déconnexion effectuée avec succès')
+    return response.redirect().toRoute('auth.login')
   }
 
   /**
