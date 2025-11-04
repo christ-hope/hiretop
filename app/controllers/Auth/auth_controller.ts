@@ -1,7 +1,7 @@
 import type { HttpContext } from '@adonisjs/core/http'
 import Mail from '@adonisjs/mail/services/main'
 
-import { AuthService } from '#services/Auth/auth_service'
+import { AuthService } from '#services/auth/auth_service'
 import { loginValidator, registerUserValidation } from '#validators/auth_request'
 import { DateTime } from 'luxon'
 import User from '#models/user'

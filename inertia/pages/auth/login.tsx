@@ -32,11 +32,11 @@ export default function Login() {
     <>
       <Head title={`Connexion à votre compte ${appName}`} />
       <AuthLayout>
-        <div className="grid h-full w-full lg:grid-cols-5">
-          <div className="lg:col-span-2 flex flex-col justify-between p-8 bg-gradient-to-b from-[#f9f9f9] to-[#fff8e6] rounded-l-4xl">
-            <div className="flex items-center gap-2">
-              <div className="h-8 w-8 rounded-full bg-linear-to-r from-yellow-400 to-blue-500" />
+        <div className="grid h-full min-h-[640px] w-full lg:grid-cols-5">
+          <div className="lg:col-span-2 flex flex-col justify-between p-8 bg-linear-to-b from-[#f9f9f9] to-[#fff8e6] rounded-l-4xl">
+            <div className="flex flex-row items-center gap-2">
               <span className="text-lg font-medium text-gray-800">{appName}</span>
+              <span className="w-2 h-2 block rounded-full bg-amber-400"></span>
             </div>
 
             <div className="flex flex-col items-center px-4 lg:px-12">
@@ -147,56 +147,51 @@ export default function Login() {
           </div>
 
           <div className="hidden lg:block lg:col-span-3 relative">
-            <div className="card absolute inset-0 rounded-r-4xl overflow-hidden bg-gradient-to-b from-[#fffbe6] to-[#fefce8]">
+            <div className="h-[680px] inset-0 rounded-4xl overflow-hidden">
               <img
                 src="https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&w=1200&q=80"
                 alt="Team collaboration"
-                className="absolute inset-0 h-full w-full object-cover"
+                className="inset-0 h-full w-full object-cover"
               />
 
               <div className="absolute inset-0 p-8 pointer-events-none">
-                <button className="absolute top-6 right-6 flex h-10 w-10 items-center justify-center rounded-full bg-white/90 shadow-lg backdrop-blur-sm">
-                  <svg className="h-5 w-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                <button className="absolute top-6 right-6 flex h-10 w-10 items-center justify-center rounded-full bg-white/85 shadow-lg backdrop-blur-sm">
+                  <svg
+                    className="h-5 w-5 text-gray-600"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M6 18L18 6M6 6l12 12"
+                    />
                   </svg>
                 </button>
 
-                <div className="absolute top-8 left-8 max-w-xs rounded-full bg-yellow-400 p-3 text-sm font-medium text-gray-800 shadow-lg">
-                  <div>Task Review With Team</div>
-                  <div className="text-xs opacity-80">09:30am–10:00am</div>
-                </div>
-
-                <div className="absolute top-32 right-12 flex -space-x-3">
-                  {['44', '68', '32', '22'].map((id) => (
-                    <img
-                      key={id}
-                      src={`https://randomuser.me/api/portraits/women/${id}.jpg`}
-                      alt="Team member"
-                      className="h-12 w-12 rounded-full border-4 border-white shadow-md"
-                    />
-                  ))}
-                </div>
-
-                <div className="absolute bottom-40 left-8 w-64 rounded-3xl bg-white/90 p-5 shadow-xl backdrop-blur-sm">
-                  <div className="mb-3 flex justify-between text-xs font-medium text-gray-500">
-                    {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map((d) => (
-                      <span key={d}>{d}</span>
-                    ))}
+                <div className="absolute bottom-60 left-20 w-64 rounded-3xl bg-white/20 p-5 shadow-xl backdrop-blur-sm">
+                  <div className="flex flex-row items-center gap-2">
+                    <span className="text-lg font-medium text-gray-800">{appName}</span>
+                    <span className="w-2 h-2 block rounded-full bg-amber-400"></span>
                   </div>
-                  <div className="grid grid-cols-7 gap-2 text-center text-sm">
-                    {[22, 23, 24].map((d) => (
-                      <div key={d} className="py-2">{d}</div>
-                    ))}
-                    <div className="rounded-lg bg-yellow-400 py-2 font-bold text-gray-800">25</div>
-                    {[26, 27, 28].map((d) => (
-                      <div key={d} className="py-2">{d}</div>
-                    ))}
+                  <div className="text-sm text-white">
+                    Les bonnes opportunite pour les bonnes personnes{' '}
                   </div>
+                  <br />
                 </div>
 
                 <div className="absolute bottom-16 left-8 w-60 rounded-3xl bg-white p-5 shadow-xl">
-                  <div className="mb-1 text-xs text-gray-500">Daily Meeting</div>
-                  <div className="mb-3 text-base font-semibold text-gray-800">12:00pm–01:00pm</div>
+                  <div className="flex flex-row justify-between items-center border-b-[1px] mb-2 pb-2 text-xs text-gray-800">
+                    <span>Geraldo</span>
+                    <span className="w-2 h-2 block rounded-full bg-amber-400"></span>
+                  </div>
+                  <div className="mb-3 text-xs text-gray-800">
+                    En tant que designer, l'imagination est au centre de tout. Grace a{' '}
+                    <strong>{appName}</strong> j'ai pu integrer une entreprise ou j'exprime
+                    librement ma passion{' '}
+                  </div>
                   <div className="flex -space-x-2">
                     {['44', '32', '68'].map((id) => (
                       <img

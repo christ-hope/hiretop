@@ -21,7 +21,10 @@ export default class extends BaseSchema {
     this.schema.createTable(this.tableName, (table) => {
       table.increments('id').primary()
       table.integer('user_id').unsigned().unique().references('users.id').onDelete('CASCADE')
+      table.string('title').nullable()
       table.string('phone', 20).nullable()
+      table.string('location').nullable()
+      table.string('is_available').nullable()
       table.text('bio').nullable()
       table.string('cv_url').nullable()
       table.string('linkedin_url').nullable()
