@@ -47,6 +47,7 @@ router.use([
  * the routes or the routes group.
  */
 export const middleware = router.named({
+  checkTalentProfileCompletion: () => import('#middleware/check_talent_profile_completion_middleware'),
   guest: () => import('#middleware/guest_middleware'),
   auth: () => import('#middleware/auth_middleware')
 })

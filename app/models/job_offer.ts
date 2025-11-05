@@ -8,15 +8,15 @@ import Application from "./application.js";
 
 export default class JobOffer extends BaseModel {
   @column({ isPrimary: true }) declare id : number
-  @column() declare company_id : number
+  @column() declare companyId : number
   @column() declare title : string
   @column() declare description : string | null
   @column() declare location : string | null
   @column() declare contract_type : string
   @column() declare status : string
-  @column() declare is_active : boolean
+  @column() declare isActive : boolean
 
-  @column.dateTime() declare expire_at : DateTime | null
+  @column.dateTime() declare expireAt : DateTime | null
 
   @column.dateTime({ autoCreate: true }) declare createdAt: DateTime
   @column.dateTime({ autoCreate: true, autoUpdate: true }) declare updatedAt: DateTime | null

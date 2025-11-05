@@ -82,4 +82,15 @@ export default class TalentController {
     }
   }
 
+  async completeProfile({ auth, inertia }: HttpContext) {
+    const user = auth.user!
+    const talent = await this.talentService.getTalent(user.talentProfile.id)
+    let completion = 0
+
+    if (talent?.id != null) {
+      completion = await this.talentService.getTalentProfileCompletion(talent?.id)
+    }
+
+    return inertia.render('Profile/Complete', { talent, completion })
+  }
 }

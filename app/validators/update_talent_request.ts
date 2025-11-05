@@ -19,7 +19,7 @@ export const updateTalentRequest = vine.compile(
       .array(
         vine.object({
           skillId: vine.number(),
-          level: vine.string().in(['beginner', 'intermediate', 'expert']).optional(),
+          level: vine.number().in([1, 2, 3]).optional(),
         })
       )
       .optional(),

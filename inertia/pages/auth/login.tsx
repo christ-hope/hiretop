@@ -2,7 +2,7 @@ import { Button } from '../../components/ui/button'
 import { Input } from '../../components/ui/input'
 import { Label } from '../../components/ui/label'
 import AuthLayout from '../../layouts/authLayout'
-import { Head, Link, usePage } from '@inertiajs/react'
+import { Head, Link, router, usePage } from '@inertiajs/react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import * as z from 'zod'
@@ -28,14 +28,28 @@ export default function Login() {
     resolver: zodResolver(loginSchema),
   })
 
+  const onSubmit = (data: LoginForm) => {
+    router.post('/login', data, {
+      onError: (errors) => {
+        console.log('Erreur de connexion', errors)
+      },
+      onSuccess: () => {
+        router.visit('/jobs')
+      },
+    })
+  }
+
   return (
     <>
       <Head title={`Connexion à votre compte ${appName}`} />
       <AuthLayout>
-        <div className="grid h-full min-h-[640px] w-full lg:grid-cols-5">
+        <div className="grid h-full w-full lg:grid-cols-5">
           <div className="lg:col-span-2 flex flex-col justify-between p-8 bg-linear-to-b from-[#f9f9f9] to-[#fff8e6] rounded-l-4xl">
             <div className="flex flex-row items-center gap-2">
-              <span className="text-lg font-medium text-gray-800">{appName}</span>
+            <div className="bg-green-600 p-1.5 rounded-lg">
+                <span className="text-white font-bold text-sm">hire</span>
+              </div>
+              <span className="text-xl font-bold text-gray-900">{appName}</span>
               <span className="w-2 h-2 block rounded-full bg-amber-400"></span>
             </div>
 
@@ -53,7 +67,7 @@ export default function Login() {
               <form
                 method="POST"
                 action="/login"
-                onSubmit={handleSubmit(() => {})}
+                onSubmit={handleSubmit(onSubmit)}
                 className="w-full max-w-sm space-y-4"
               >
                 <div>
@@ -147,7 +161,7 @@ export default function Login() {
           </div>
 
           <div className="hidden lg:block lg:col-span-3 relative">
-            <div className="h-[680px] inset-0 rounded-4xl overflow-hidden">
+            <div className="h-full inset-0 rounded-4xl overflow-hidden">
               <img
                 src="https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&w=1200&q=80"
                 alt="Team collaboration"
@@ -183,7 +197,7 @@ export default function Login() {
                 </div>
 
                 <div className="absolute bottom-16 left-8 w-60 rounded-3xl bg-white p-5 shadow-xl">
-                  <div className="flex flex-row justify-between items-center border-b-[1px] mb-2 pb-2 text-xs text-gray-800">
+                  <div className="flex flex-row justify-between items-center border-b mb-2 pb-2 text-xs text-gray-800">
                     <span>Geraldo</span>
                     <span className="w-2 h-2 block rounded-full bg-amber-400"></span>
                   </div>

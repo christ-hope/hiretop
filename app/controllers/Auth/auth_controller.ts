@@ -84,11 +84,19 @@ export default class AuthController {
       return response.redirect().back()
     }
 
-    // Ici utiisation de session
-    await auth.use('web').login(user)
+    try {
+      // Ici utilisation de session
+      const user = await User.verifyCredentials(email, password)
+      await auth.use('web').login(user)
 
-    // ici utilisation token
-    // User.accessTokens.create(user)
+      // ici utilisation token (ancienne option)
+      // User.accessTokens.create(user)
+      session.flash('success', 'Connexion réussie ! Bienvenue.')
+      return response.redirect('/jobs')
+    } catch {
+      session.flash('error', 'Identifiants incorrects.')
+      return response.redirect().back()
+    }
   }
 
   /**

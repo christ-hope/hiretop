@@ -77,7 +77,7 @@ export default class extends BaseSchema {
       table.increments('id').primary()
       table.integer('talent_id').unsigned().references('talent_profiles.id').onDelete('CASCADE')
       table.integer('skill_id').unsigned().references('skills.id').onDelete('CASCADE')
-      table.integer('level').nullable() // (1=debutant, 4=expert)
+      table.integer('level').nullable() // (1=debutant, 3=expert)
       table.boolean('is_validated').defaultTo(false).comment('Validé par admin ou certificat')
 
       table.timestamp('created_at').defaultTo(this.now())

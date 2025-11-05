@@ -24,7 +24,7 @@ interface UpdateTalentData {
   linkedinUrl?: string | null
   githubUrl?: string | null
   cv?: any
-  skills?: { skillId: number; level?: string }[]
+  skills?: { skillId: number; level?: number }[]
   experiences?: Array<{
     id?: number
     title: string
@@ -58,7 +58,7 @@ interface TalentResponse {
 
 export class TalentService {
   /**
-   * Récupère les talents depuis TalentProfile (meilleure approche)
+   * Récupère les talents depuis TalentProfile
    */
   async getTalents(filters: TalentFilters = {}): Promise<TalentResponse> {
     const { search = '', skills = [], location = '', page = 1, limit = 20 } = filters
@@ -68,6 +68,7 @@ export class TalentService {
       .preload('skills')
       .preload('experiences')
       .preload('educations')
+      .whereNull('deleted_at')
 
     // Recherche a partir des filtres si definies
     if (search) {
@@ -99,10 +100,11 @@ export class TalentService {
 
   /**
    * Récuperer un talent par son ID
+   * @param talentId ID du profil talent
    */
-  async getTalent(id: number) {
+  async getTalent(talentId: number) {
     return TalentProfile.query()
-      .where('id', id)
+      .where('id', talentId)
       .preload('user')
       .preload('skills')
       .preload('experiences')
@@ -116,10 +118,11 @@ export class TalentService {
    * @param data Données à mettre à jour
    * @param userId ID de l'utilisateur
    */
-  /**
-   * Mise à jour complète du profil talent
-   */
-  async updateTalent(talentId: number, data: UpdateTalentData, userId: number): Promise<TalentProfile> {
+  async updateTalent(
+    talentId: number,
+    data: UpdateTalentData,
+    userId: number
+  ): Promise<TalentProfile> {
     const {
       phone,
       title,
@@ -143,7 +146,7 @@ export class TalentService {
       .preload('educations')
       .firstOrFail()
 
-      // Verification de l'autorisation
+    // Verification de l'autorisation
     if (talentProfile.user_id !== userId) {
       throw new Error("Vous n'êtes pas autorisé à effectuer cette action:")
     }
@@ -165,8 +168,13 @@ export class TalentService {
 
     // Creation ou mise a jour des competences
     if (skills !== undefined) {
-      const validSkillIds = await Skill.query().whereIn('id', skills.map(s => s.skillId)).select('id')
-      const validIds = validSkillIds.map(s => s.id)
+      const validSkillIds = await Skill.query()
+        .whereIn(
+          'id',
+          skills.map((s) => s.skillId)
+        )
+        .select('id')
+      const validIds = validSkillIds.map((s) => s.id)
 
       if (validIds.length !== skills.length) {
         throw new Error('Une ou plusieurs compétences sont invalides.')
@@ -174,9 +182,9 @@ export class TalentService {
 
       await talentProfile.related('skills').detach()
 
-      const attachData: Record<number, { level: string }> = {}
+      const attachData: Record<number, { level: number }> = {}
       for (const { skillId, level } of skills) {
-        attachData[skillId] = { level: level || 'debutant' }
+        attachData[skillId] = { level: level || 1}
       }
 
       await talentProfile.related('skills').attach(attachData)
@@ -184,12 +192,15 @@ export class TalentService {
 
     // Creation ou mise a jour des experiences professionnelles
     if (experiences !== undefined) {
-      const existingIds = talentProfile.experiences.map(e => e.id).filter(Boolean)
-      const incomingIds = experiences.map(e => e.id).filter(Boolean)
+      const existingIds = talentProfile.experiences.map((e) => e.id).filter(Boolean)
+      const incomingIds = experiences.map((e) => e.id).filter(Boolean)
 
-      const toDelete = existingIds.filter(id => !incomingIds.includes(id))
+      const toDelete = existingIds.filter((id) => !incomingIds.includes(id))
       if (toDelete.length > 0) {
-        await TalentExperience.query().whereIn('id', toDelete).where('talent_profile_id', talentId).delete()
+        await TalentExperience.query()
+          .whereIn('id', toDelete)
+          .where('talent_profile_id', talentId)
+          .delete()
       }
 
       for (const exp of experiences) {
@@ -213,12 +224,15 @@ export class TalentService {
 
     // Creation ou mise a jour des formations
     if (educations !== undefined) {
-      const existingIds = talentProfile.educations.map(e => e.id).filter(Boolean)
-      const incomingIds = educations.map(e => e.id).filter(Boolean)
+      const existingIds = talentProfile.educations.map((e) => e.id).filter(Boolean)
+      const incomingIds = educations.map((e) => e.id).filter(Boolean)
 
-      const toDelete = existingIds.filter(id => !incomingIds.includes(id))
+      const toDelete = existingIds.filter((id) => !incomingIds.includes(id))
       if (toDelete.length > 0) {
-        await TalentEducation.query().whereIn('id', toDelete).where('talent_profile_id', talentId).delete()
+        await TalentEducation.query()
+          .whereIn('id', toDelete)
+          .where('talent_profile_id', talentId)
+          .delete()
       }
 
       for (const edu of educations) {
@@ -247,5 +261,38 @@ export class TalentService {
     await talentProfile.load('educations')
 
     return talentProfile
+  }
+
+  /**
+   * Verifier le pourcentage de completion du profil du talent
+   * @param talentId ID du profil talent
+   */
+  async getTalentProfileCompletion(talentId: number): Promise<number> {
+    const talent = await TalentProfile.query()
+      .where('id', talentId)
+      .preload('skills')
+      .preload('experiences')
+      .preload('educations')
+      .firstOrFail()
+
+    let completion = 0
+
+    if (talent.phone && talent.bio && talent.location && talent.cv_url) {
+      completion += 25
+    }
+
+    if (talent.skills.length > 0) {
+      completion += 25
+    }
+
+    if (talent.educations.length > 0) {
+      completion += 25
+    }
+
+    if (talent.experiences.length > 0) {
+      completion += 25
+    }
+
+    return completion
   }
 }

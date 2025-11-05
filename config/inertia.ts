@@ -40,6 +40,10 @@ const inertiaConfig = defineConfig({
           name: role.name,
         })),
         permissions: user.permissions.map((perm) => perm.name),
+        isTalent: user.roles.some(r => r.name === 'TALENT'),
+        isCompanyAdmin: user.roles.some(r => r.name === 'COMPANY_ADMIN'),
+        isRecruiter: user.roles.some(r => r.name === 'RECRUITER'),
+        talentProfile: user.talentProfile,
       }
     },
 

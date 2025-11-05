@@ -107,17 +107,17 @@ export default class UserAndCompanySeeder extends BaseSeeder {
 
     // Création d'une offre d’emploi
     const jobOffer = await JobOffer.firstOrCreate(
-      { company_id: company.id, title: 'Développeur Full-Stack React / Node.js' },
+      { companyId: company.id, title: 'Développeur Full-Stack React / Node.js' },
 
       {
-      company_id: company.id,
+      companyId: company.id,
       title: 'Développeur Full-Stack React / Node.js',
       description: 'Nous recherchons un développeur passionné pour rejoindre notre équipe. **Missions principales :* - Concevoir et développer des applications web moderne - Intégrer des API RESTfu - Optimiser les performances et l’expérience utilisateu - Collaborer avec les designers et les product owner **Profil recherché :* - Minimum 3 ans d’expérienc - Maîtrise de React, Node.js, TypeScrip - Connaissance de Git, Docker, CI/C - Esprit d’équipe et autonomi **Avantages :* - Télétravail 3 jours/semain - 13ème mois + prime - Formation continu - Équipe dynamique',
       location: 'Paris ou Remote',
       contract_type: 'CDI',
       status: 'PUBLISHED',
-      is_active: true,
-      expire_at: DateTime.now().plus({ days: 30 }).set({ millisecond: 0 }),
+      isActive: true,
+      expireAt: DateTime.now().plus({ days: 30 }).set({ millisecond: 0 }),
     })
 
     // Competences associees a l'offre
